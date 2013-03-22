@@ -1,0 +1,10 @@
+{
+  "name": "harlemshake",
+  "version": "0.0.1",
+  "start": "harlemshake.js",
+  "dependencies": {
+    "coffee-script": ">=0",
+    "ar-drone":  ">=0",
+    "execSync": ">=0"
+  }
+}
