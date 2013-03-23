@@ -3,6 +3,8 @@ Drone = require './drone'
 
 delay = (ms, func) -> setTimeout func, ms
 
+frequency = 800
+
 testflight = (drone) ->
   drone.takeoff()
   console.log 'takeoff'
@@ -16,7 +18,7 @@ danceMove = (drone, time, m, cb) ->
   timer = setInterval ->
     i += 1
     m(drone, i)
-  , 1000
+  , frequency 
   setTimeout ->
     clearInterval(timer)
     cb()
@@ -50,14 +52,8 @@ dance = (drone, m, wait) ->
     # drone.takeoff()
     console.log drone.ip, 'takeoff'
     delay 4000, ->
-      dancePeriod = 26000 - wait
-      console.log drone.ip, 'dance'
-      # (drone, time, m, cb)
-
+      dancePeriod = 30000 - wait
       danceMove drone, dancePeriod, m, ->
-        console.log drone.ip, 'finished dancing'
-
-      delay dancePeriod, ->
         console.log drone.ip, 'land'
         # drone.stop()
         # drone.land()
@@ -73,13 +69,12 @@ start = ->
   delay 4000, -> exec('open ~/Downloads/HarlemShake.mp3')
   for ip in twists
     drone = new Drone(ip)
-    dance(drone, twist, 15000)
+    dance(drone, twist, 14500)
   for ip in verticals
     drone = new Drone(ip)
-    dance(drone, upDown, 15000)
+    dance(drone, upDown, 14500)
   for ip in horizontals
     drone = new Drone(ip)
-    dance(drone, leftRight, 15000)
+    dance(drone, leftRight, 14500)
 
 start()
-
