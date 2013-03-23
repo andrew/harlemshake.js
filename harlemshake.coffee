@@ -3,6 +3,8 @@ Drone = require './drone'
 
 delay = (ms, func) -> setTimeout func, ms
 
+frequency = 800
+
 testflight = (drone) ->
   drone.takeoff()
   console.log 'takeoff'
@@ -10,12 +12,13 @@ testflight = (drone) ->
     drone.land()
     console.log 'landed'
 
-danceMove = (drone, time, danceMove, cb) ->
-  i = 0
+danceMove = (drone, time, m, cb) ->
+  i = 1
+  console.log(i)
   timer = setInterval ->
     i += 1
-    danceMove(drone, i)
-  , 1000
+    m(drone, i)
+  , frequency 
   setTimeout ->
     clearInterval(timer)
     cb()
@@ -26,7 +29,6 @@ genericMove = (drone, i, speed, move) ->
     direction = -1
   else
     direction = 1
-
   drone.stop()
   move(drone, speed*direction)
 
@@ -45,39 +47,34 @@ twist = (drone, i) ->
     console.log drone.ip, 'twist'
     drone.clockwise(i)
 
-dance = (drone, danceMove, wait) ->
+dance = (drone, m, wait) ->
   delay wait, ->
     drone.takeoff()
     console.log drone.ip, 'takeoff'
     delay 4000, ->
-      dancePeriod = 26000 - wait
-      console.log drone.ip, 'dance'
-      danceMove drone, dancePeriod, danceMove, ->
-        console.log drone.ip, 'finished dancing'
-
-      delay dancePeriod, ->
+      dancePeriod = 30000 - wait
+      danceMove drone, dancePeriod, m, ->
         console.log drone.ip, 'land'
         drone.stop()
         drone.land()
 
-firstIP= '192.168.1.10'
-twists = ['192.168.1.11', '192.168.1.12']
-verticals = ['192.168.1.13', '192.168.1.14']
-horizontals = ['192.168.1.15', '192.168.1.16']
+firstIP= '192.168.1.18'
+twists = ['192.168.1.19']
+verticals = ['192.168.1.13']
+horizontals = ['192.168.1.10']
 
 start = ->
-  delay 1000, -> exec('open ~/Downloads/HarlemShake.mp3')
   firstDrone = new Drone(firstIP)
   dance(firstDrone, twist, 0)
+  delay 4000, -> exec('open ~/Downloads/HarlemShake.mp3')
   for ip in twists
     drone = new Drone(ip)
-    dance(drone, twist, 15000)
+    dance(drone, twist, 14500)
   for ip in verticals
     drone = new Drone(ip)
-    dance(drone, upDown, 15000)
+    dance(drone, upDown, 14500)
   for ip in horizontals
     drone = new Drone(ip)
-    dance(drone, leftRight, 15000)
+    dance(drone, leftRight, 14500)
 
 start()
-
