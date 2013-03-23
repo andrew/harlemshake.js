@@ -5,6 +5,7 @@ class Drone
     @speed = 0.5
     @accel = 0.01
     @control = arDrone.createUdpControl(ip: ip)
+    @client = arDrone.createClient(ip: ip)
     @ref = {}
     @pcmd = {}
     @rate = 30
@@ -34,6 +35,9 @@ class Drone
 
   left: =>
     @pcmd.left = @speed;
+
+  animateLeds: (name, hz, duration)=>
+    @client.animateLeds(name, hz, duration)
 
   move: (directions, reset = true) =>
     # console.log reset
