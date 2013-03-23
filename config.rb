@@ -32,6 +32,7 @@ def check(droneSSIDName, droneIP)
   res = `ping -q -c 1 -t 1 #{droneIP}`
   available = (res =~ /100.0% packet loss/).nil?
   puts "#{droneSSIDName}: #{available}"
+  return available
 end
 
 drones = {
@@ -45,12 +46,9 @@ drones = {
   # 'holidayextras' => '192.168.1.17',
   'mark'=> '192.168.1.18',
   'eventhandler'=> '192.168.1.19',
-  #'5apps'=> '192.168.1.20',
+  # '5apps'=> '192.168.1.20',
 }
 
-# drones.each{|k,v| configure(k,v)}
-# `networksetup -setairportnetwork en0 poppy`
-drones.each{|k,v| check(k,v)}
-
-# `coffee flash.coffee`
-
+drones.each{|k,v| configure(k,v)}
+`networksetup -setairportnetwork en0 poppy`
+drones.each{|k,v| check(k,v) }
